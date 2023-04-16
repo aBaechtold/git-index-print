@@ -1,5 +1,5 @@
 #
-# Prints the content of the Git index file (.git/index).
+# Data model representing the content of the Git index file (.git/index).
 #
 # The index file content is version specific.
 # See 'https://git-scm.com/docs/index-format'.
@@ -9,6 +9,7 @@ require "bindata/base_primitive"
 
 
 module GitIndex
+
 
   HashAlgoSize = 20 #SHA1
 
@@ -289,14 +290,21 @@ module GitIndex
     header :header
 
     # List of index entries:
-    # Index entries are sorted in ascending order on the name field,interpreted as a string of unsigned bytes (i.e. memcmp() order, no localization, no special casing of directory separator '/'). Entries with the same name are sorted by their stage field.
+    # Index entries are sorted in ascending order on the name field,
+    # interpreted as a string of unsigned bytes (i.e. memcmp() order, no localization, 
+    # no special casing of directory separator '/').
+    # Entries with the same name are sorted by their stage field.
 
     array :index_entries,
           :type => :index_entry,
           :initial_length => lambda { header.nr_of_index_entries }
 
     # Extensions:
-    # Note: 'onlyif' cannot contain a call to num_bytes on self as the sum computation tries to exclude optional data by checking onlyif, thus resulting in a circular call chain and eventually a stack too deep error.
+
+    # Note:
+    # 'onlyif' cannot contain a call to num_bytes on self as the sum computation tries to exclude optional data by checking onlyif,
+    # thus resulting in a circular call chain and eventually a stack too deep error.
+
     array :extensions, 
           :type => :index_extension,
           :onlyif => lambda { current_size = header.num_bytes + index_entries.num_bytes; current_size < get_size_in_bytes - HashAlgoSize; },
