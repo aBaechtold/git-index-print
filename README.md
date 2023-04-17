@@ -11,6 +11,8 @@ See [LICENSE](LICENSE).
 The project consists of a Ruby [module](src/git_index.rb) containing the file format definition based on `BinData` DSL and a [script](src/show_index.rb) for printing the parsed file content to the command line.
 The module could be used standalone.
 
+![Example Screenshot](assets/Example.png)
+
 ## Install
 
 Prerequisite: Ruby installed.
